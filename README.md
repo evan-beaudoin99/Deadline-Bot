@@ -8,7 +8,7 @@ Deadline Bot sends you weekly updates and foresight on all your deadlines (Tests
 
 All you need to do is make an account, then drag and drop your course outlines once! Simple!
 
-![Alt text for the image](assets/demo_pics/img1.png)
+![Alt text for the image](demo_pics/img1.png)
 
-![Alt text for the image](assets/demo_pics/img2.png)
+![Alt text for the image](demo_pics/img2.png)
 
