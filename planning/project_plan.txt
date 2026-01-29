@@ -1,0 +1,138 @@
+# University Course Reminder Web App
+Technologies: HTML, CSS, JavaScript (frontend), Node.js + Express (backend), JSON/Database (data storage)
+
+---
+
+## 1. Project Overview
+This web app helps university students stay on top of their weekly academic tasks by automatically reminding them about classes, tutorials, quizzes, and exams. The goal is to reduce time spent checking multiple course outlines.
+
+The system will allow users to:
+- Create a profile (name, email, enrolled courses)
+- Input data from their course outlines (dates, deadlines)
+- Store this data on the server
+- Automatically send a weekly summary email with upcoming tasks
+
+Later versions will include:
+- Automated data extraction (data mining from course PDFs)
+- Calendar integration (Google Calendar, Outlook)
+- AI-based reminders or natural-language input (“Add my CS101 midterm Oct 15”)
+
+---
+
+## 2. File Structure
+
+project-root/
+│
+├── server/                   # Node.js + Express backend
+│   ├── server.js             # Entry point for server
+│   ├── routes/               # Define different API routes
+│   │   ├── userRoutes.js
+│   │   ├── courseRoutes.js
+│   │   └── emailRoutes.js
+│   ├── controllers/          # Route logic and data handling
+│   │   ├── userController.js
+│   │   ├── courseController.js
+│   │   └── emailController.js
+│   ├── models/               # Data models or JSON handling
+│   │   ├── userModel.js
+│   │   └── courseModel.js
+│   ├── utils/                # Helper functions (email, scheduling, etc.)
+│   │   ├── emailSender.js
+│   │   └── scheduler.js
+│   └── data/                 # Temporary JSON storage (until a DB is added)
+│       ├── users.json
+│       └── courses.json
+│
+├── client/                   # Frontend files
+│   ├── index.html            # Landing page
+│   ├── dashboard.html        # User dashboard
+│   ├── profile.html          # User info and course input
+│   ├── styles/               # CSS files
+│   │   ├── main.css
+│   │   └── dashboard.css
+│   ├── scripts/              # Frontend JS
+│   │   ├── main.js
+│   │   ├── dashboard.js
+│   │   └── profile.js
+│   └── assets/               # Images, logos, icons
+│       ├── logo.png
+│       └── background.jpg
+│
+├── package.json              # Node.js dependencies
+├── .gitignore
+└── README.md
+
+---
+
+## 3. Design Process & Development Plan
+
+### Phase 1: Planning
+- Identify key user actions: sign up, input course data, view weekly reminders.
+- Define basic data model:
+  - User: { name, email, courses[] }
+  - Course: { courseCode, classDays, assignments[], tests[] }
+- Plan server endpoints:
+  - POST /api/users -> create user
+  - GET /api/users/:id -> get user data
+  - POST /api/courses -> add course
+  - GET /api/reminders/:userId -> generate weekly summary
+
+---
+
+### Phase 2: Building the Frontend
+- Start with simple HTML structure (profile page + dashboard)
+- Use CSS to create a clean, readable layout
+- Add JavaScript to handle form input, validation, and sending data to the backend using `fetch()`
+- Display user’s upcoming tasks dynamically
+
+---
+
+### Phase 3: Building the Backend
+- Initialize Node.js project (`npm init`)
+- Install Express, Nodemailer (for email), and a lightweight JSON database (like `lowdb` or `fs`)
+- Create RESTful routes for users and courses
+- Set up email sending (test with a dummy Gmail account)
+- Implement a scheduler using `node-cron` to send weekly reminders automatically
+
+---
+
+### Phase 4: Connecting Frontend and Backend
+- Test all routes using Postman
+- Hook up `fetch()` calls in the frontend to communicate with backend
+- Ensure data is being stored and retrieved correctly
+- Validate user input and handle server responses
+
+---
+
+### Phase 5: Expansion and Data Mining
+- Add PDF upload feature (for course outlines)
+- Use a text-extraction library (like `pdf-parse`) to automatically detect important dates
+- Improve UI/UX with a dashboard summary view
+- Add authentication (JWT or Passport)
+- Migrate from JSON storage to MongoDB or PostgreSQL
+
+---
+
+## 4. Optional Tools and Libraries
+- **Frontend:** TailwindCSS or Bootstrap for styling
+- **Backend:** Express.js for server routes, Nodemailer for email, Node-cron for scheduling
+- **Database:** LowDB (beginner) or MongoDB (scalable)
+- **Version Control:** Git + GitHub
+- **Deployment:** Render, Railway, or Vercel (for free hosting)
+
+---
+
+## 5. Future Ideas
+- Sync with university timetables via API
+- Browser extension for automatic data scraping from course pages
+- Smart reminders: “You have 2 assignments due next week — start one today!”
+- Mobile app companion using React Native
+
+---
+
+## 6. Notes for Project-Based Learning
+- Commit small changes regularly with meaningful messages
+- Document everything in README.md (features, setup, screenshots)
+- Treat this like a real product: version 0.1 → MVP, then iterate
+- Focus on one core feature at a time (don’t rush to add everything)
+- Write down problems and how you solved them — this becomes part of your learning portfolio

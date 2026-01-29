@@ -1,0 +1,73 @@
+Add routers DONE
+Add pdf upload abilites with Mongo DONE
+Make sure pdfs can be read DONE
+Make sure pdfs cann be read by python DONE
+Add password hashing DONE
+
+
+On the summary page, allow date range modification
+
+
+On register page allow school registration, semester selection, year
+
+When uploading a pdf, must include a course section
+
+Test all api routes, refer to failed project feedback to improve new design
+
+Add email scheduling feature that runs in the background
+
+Add a feature that allows you to remove pdfs from your account
+
+
+
+Storage Limit: While convenient for small items like user avatars, 
+MongoDB documents have a maximum size of 16MB. For larger files, consider using GridFS which is designed for storing large binary files in MongoDB.
+
+Querying: It is generally recommended to store a hash digest (e.g., SHA256) of the 
+binary data in a separate string field if you need to perform efficient lookups or check for duplicate files. 
+Querying directly by the raw buffer content can be inefficient. 
+
+Low priority:
+
+
+With all else finished run server on linux box @ home or on a linode server
+
+
+Recent; 
+
+
+Add  a loading feature on the front end, and then when done display "Done" with a link to the course summary
+
+Convert raw dates to a nice more readable format
+
+Allow users to add their school - changing the color of the UI Based on the schools colors
+
+Create a school collection in the db where each schools calendar is stored provided weeks by index, start and end
+
+ex 
+{
+  "semester": "Winter 2026",
+  "institution": "Carleton University",
+  "schedule": [
+    { "week": 1, "start": "2026-01-05", "end": "2026-01-11", "notes": "Classes begin Jan 5" },
+    { "week": 2, "start": "2026-01-12", "end": "2026-01-18", "notes": "Full winter reg ends Jan 16" },
+    { "week": 3, "start": "2026-01-19", "end": "2026-01-25", "notes": "" },
+    { "week": 4, "start": "2026-01-26", "end": "2026-02-01", "notes": "Withdrawal deadline Jan 31" },
+    { "week": 5, "start": "2026-02-02", "end": "2026-02-08", "notes": "" },
+    { "week": 6, "start": "2026-02-09", "end": "2026-02-15", "notes": "Early winter classes end Feb 13" },
+    { "week": "Break", "start": "2026-02-16", "end": "2026-02-22", "notes": "Winter Break - No Classes" },
+    { "week": 7, "start": "2026-02-23", "end": "2026-03-01", "notes": "Late winter classes begin Feb 23" },
+    { "week": 8, "start": "2026-03-02", "end": "2026-03-08", "notes": "" },
+    { "week": 9, "start": "2026-03-09", "end": "2026-03-15", "notes": "Academic withdrawal deadline Mar 15" },
+    { "week": 10, "start": "2026-03-16", "end": "2026-03-22", "notes": "" },
+    { "week": 11, "start": "2026-03-23", "end": "2026-03-29", "notes": "" },
+    { "week": 12, "start": "2026-03-30", "end": "2026-04-05", "notes": "Statutory holiday Apr 3" },
+    { "week": 13, "start": "2026-04-06", "end": "2026-04-10", "notes": "Classes end Apr 8" },
+    { "week": "Exams", "start": "2026-04-11", "end": "2026-04-23", "notes": "Final Examination Period" }
+  ]
+}
+
+
+BIG PROBLEM:
+
+Figure out how to slice pdf text to reduce token usage
