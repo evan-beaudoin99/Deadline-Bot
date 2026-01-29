@@ -1,0 +1,190 @@
+/* --- Variables & Reset --- */
+:root {
+  --carleton-red: #c51230;
+  --dark-grey: #2d2d2d;
+  --light-bg: #f4f7f6;
+  --white: #ffffff;
+  --border-color: #dddddd;
+  --text-main: #333;
+  --transition: all 0.3s ease;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--light-bg);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+/* --- Navigation --- */
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--dark-grey);
+}
+
+.navbar li {
+  float: left;
+}
+
+.navbar li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  padding: 14px 20px;
+  transition: var(--transition);
+}
+
+.navbar li a:hover {
+  background-color: var(--carleton-red);
+}
+
+/* --- Layout Containers --- */
+header {
+  background-color: var(--dark-grey);
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.course-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid var(--carleton-red);
+}
+
+/* --- Components & UI Elements --- */
+.file-upload-box {
+  background: #f9f9f9;
+  padding: 25px;
+  border: 2px dashed #bbb;
+  border-radius: 10px;
+  margin: 20px 0;
+  text-align: center;
+  align-items: center;
+}
+
+.btn-primary {
+  background-color: var(--carleton-red);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+  margin: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #a00f28;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--dark-grey);
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pdf-list {
+  list-style: none;
+  padding: 0;
+}
+
+.pdf-element {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.pdf-actions {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+
+
+.pdf-element img {
+  height: 22px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.pdf-element img:hover {
+  opacity: 1;
+}
+
+.loader {
+  border: 2px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 1.6px solid #d01717;
+  width: 18px;
+  height: 18px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin-right: 10px;
+}
+
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- Tables & Data --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th, td {
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+}
+
+.date-section-title {
+  color: var(--carleton-red);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  margin-top: 25px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+

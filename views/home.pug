@@ -1,0 +1,66 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Deadline Bot 3000 | Home
+    link(rel="stylesheet", href="/styles/style.css")
+    script(src="/scripts/client.js")
+
+  body
+    if alertMessage 
+      script.
+        alert("#{alertMessage}")
+
+    header
+      h1 Deadline Bot 3000
+      p Simplifying your Carleton semester
+
+    ul.navbar
+      li: a(href="/") Dashboard
+      li: a(href="/data") Course Summary
+      if session.loggedIn
+        li: a(href="/logout") Logout
+      else
+        li: a(href="/login") Login
+        li: a(href="/register") Register
+
+    .container
+      section.course-card
+        h2 Welcome to your Dashboard
+        p This application parses your PDF course outlines into a unified schedule. Get weekly updates on assignments, tests, and tutorials all in one place.
+
+      if session.loggedIn
+        section.course-card
+          h3 Welcome back, #{session.user.firstname}!
+          
+          .file-upload-box
+            label(for="pdf") 
+              strong 📂 Upload PDF Course Outline
+            form(action="/upload", method="post", enctype="multipart/form-data")
+              input(type="file", name="pdf")
+              br
+              button.btn-primary(type="submit" ) Upload
+
+          h3 Your Documents
+          if session.user.pdfs && session.user.pdfs.length > 0
+            ul.pdf-list
+              each pdf in session.user.pdfs
+                li.pdf-element
+                  - pdf_name = pdf.filename.split('.')[0]
+                  span 📄 #{pdf_name}
+                  .pdf-actions
+                    button#parse.btn-secondary(type="submit", onclick=`startProcess(event, '${pdf._id}')`) Parse
+                    div#status-icon
+                    a(href='#' onclick=`handleRemove(event, '${session.user.id}', '${pdf._id}')`)
+                      img(src="/images/remove.png", alt="remove")
+            form(action="/start-emailer", method="post")
+              button.btn-primary(type="submit") Get Weekly Updates
+          else
+            p No PDFs uploaded yet.
+
+
+      else 
+        section.course-card
+          h2 Get Started
+          p Please #[a(href="/login") Log In] or #[a(href="/register") Create an Account] to start tracking your deadlines.

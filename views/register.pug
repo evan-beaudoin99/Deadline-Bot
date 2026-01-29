@@ -1,0 +1,48 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Deadline Bot 3000
+    link(rel="stylesheet", href="/styles/auth.css")
+
+  body
+
+    if alertMessage 
+      script.
+        alert("#{alertMessage}")
+        -alertMessage = ""
+
+    header
+      h1 Deadline Bot 3000
+    
+    nav
+      ul.navbar
+        li: a(href="/") ← Back to Home
+
+    .auth-wrapper
+      .auth-card
+        h1 Create Account
+
+        form(method="post", action="/register")
+          .form-group
+            label First Name:
+            input(type="text", name="firstname", placeholder="First Name")
+          .form-group
+            label Last Name:
+            input(type="text", name="lastname", placeholder="Last Name")
+          .form-group
+            label Create Username:
+            input(type="text", name="username", placeholder="Enter username")
+          .form-group
+            label Email:
+            input(type="text", name="email", placeholder="Enter email")
+          .form-group
+            label Create a Password:
+            input(type="password", name="password", placeholder="Enter passwword")
+
+          button.btn-primary(type="submit") Submit
+
+        .auth-footer
+          p Already have an account? 
+            a(href="/login") Login

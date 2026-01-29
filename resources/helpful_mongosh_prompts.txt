@@ -1,0 +1,6 @@
+
+
+
+
+
+db.users.findOne( {username: 'evanbeaudoin', "pdfs._id": ObjectId("6965846a82ece9ce554e0606")}, {"pdfs.data": 0})

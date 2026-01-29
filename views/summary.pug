@@ -1,0 +1,77 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Deadline Bot 3000
+    link(rel="stylesheet", href="/styles/style.css")
+
+  body
+    if alertMessage 
+      script.
+        alert("#{alertMessage}")
+
+    header
+      h1 Carleton University
+      h2 Winter Semester 2026 Course Summary
+
+    nav
+      a(href="/") ← Back to Home
+
+    .container
+      each course in courses
+        section.course-card
+          h2 #{course.course_name}
+          
+          .prof-info
+            span 
+              strong Professor: 
+              | #{course.professor}
+            span 
+              strong Email: 
+              a(href=`mailto:${course.professor_email}`) #{course.professor_email}
+
+          h4.date-section-title Important Dates
+
+          // Assignments Section
+          .section-group
+            b Assignments
+            if course.dates.assignments.length === 0
+              p.empty-msg No Assignments this semester or no dates provided.
+            else 
+              ul
+                each assignment in course.dates.assignments
+                  li
+                    strong= assignment.assignment_name
+                    ul 
+                      li= "Release: " + assignment.release
+                      li= "Due: " + assignment.due
+
+          // Tests Section
+          .section-group
+            b Tests & Quizzes
+            if course.dates.tests.length === 0
+              p.empty-msg No Tests scheduled.
+            else 
+              table
+                thead
+                  tr 
+                    th Name
+                    th Date 
+                    th Value
+                tbody
+                  each test in course.dates.tests
+                    tr
+                      td= test.test_name
+                      td= test.date 
+                      td= test.grade_val
+
+          // Tutorials Section
+          .section-group
+            b Tutorials
+            if course.dates.tutorials.length == 0
+              p.empty-msg No Tutorials provided in outline.
+            else 
+              ul
+                each tutorial in course.dates.tutorials 
+                  li= tutorial.tutorial_name + " : " + tutorial.date
