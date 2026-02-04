@@ -11,3 +11,5 @@ All you need to do is make an account, then drag and drop your course outlines o
 ![Alt text for the image](demo_pics/img1.png)
 
 ![Alt text for the image](demo_pics/img2.png)
+
+Not 100% done yet, server will be available to use when completed
