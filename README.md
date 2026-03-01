@@ -44,4 +44,3 @@ Not 100% done yet, server will be available to use when completed
 
 ![Demo 1](demo_pics/img1.png)
 ![Demo 2](demo_pics/img2.png)
->>>>>>> 0839f29 (Refactored entire server)
