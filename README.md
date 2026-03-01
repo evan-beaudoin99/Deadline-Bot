@@ -10,9 +10,6 @@ All you need to do is create an account, then upload your course outlines once. 
 
 ## What the project does
 
-<<<<<<< HEAD
-![Alt text for the image](demo_pics/img2.png)
-
 Not 100% done yet, server will be available to use when completed
 =======
 - Lets students upload course outline PDFs.
