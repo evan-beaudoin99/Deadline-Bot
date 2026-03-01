@@ -20,58 +20,71 @@ html(lang="en")
 
     .container
       each course in courses
-        section.course-card
-          h2 #{course.course_name}
-          
-          .prof-info
-            span 
-              strong Professor: 
-              | #{course.professor}
-            span 
-              strong Email: 
-              a(href=`mailto:${course.professor_email}`) #{course.professor_email}
+        section.course-card(id=`course-${course._id}`)
+          .summary-header
+            h2 #{course.course_name}
+            form(action='/courses/remove', method='post')
+              input(type='hidden', name='courseId', value=`${course._id}`)
+              input(type='hidden', name='redirectTo', value='/data')
+              button.btn-danger(type='submit') Remove Course
 
-          h4.date-section-title Important Dates
+          if course.summaryStatus === 'processing'
+            p Summary is still processing for this course. Please check back shortly.
+          else if course.summaryStatus === 'failed'
+            p Summary processing failed for this course.
+          else
+            .prof-info
+              span 
+                strong Professor: 
+                | #{course.professor || 'N/A'}
+              span 
+                strong Email: 
+                if course.professor_email
+                  a(href=`mailto:${course.professor_email}`) #{course.professor_email}
+                else
+                  | N/A
 
-          // Assignments Section
-          .section-group
-            b Assignments
-            if course.dates.assignments.length === 0
-              p.empty-msg No Assignments this semester or no dates provided.
-            else 
-              ul
-                each assignment in course.dates.assignments
-                  li
-                    strong= assignment.assignment_name
-                    ul 
-                      li= "Release: " + assignment.release
-                      li= "Due: " + assignment.due
+            h4.date-section-title Important Dates
 
-          // Tests Section
-          .section-group
-            b Tests & Quizzes
-            if course.dates.tests.length === 0
-              p.empty-msg No Tests scheduled.
-            else 
-              table
-                thead
-                  tr 
-                    th Name
-                    th Date 
-                    th Value
-                tbody
-                  each test in course.dates.tests
-                    tr
-                      td= test.test_name
-                      td= test.date 
-                      td= test.grade_val
+            // Assignments Section
+            .section-group
+              b Assignments
+              if !course.dates || !course.dates.assignments || course.dates.assignments.length === 0
+                p.empty-msg No Assignments this semester or no dates provided.
+              else 
+                ul
+                  each assignment in course.dates.assignments
+                    li
+                      strong= assignment.assignment_name
+                      ul 
+                        li= "Release: " + assignment.release
+                        li= "Due: " + assignment.due
 
-          // Tutorials Section
-          .section-group
-            b Tutorials
-            if course.dates.tutorials.length == 0
-              p.empty-msg No Tutorials provided in outline.
-            else 
-              ul
-                each tutorial in course.dates.tutorials 
-                  li= tutorial.tutorial_name + " : " + tutorial.date
+            // Tests Section
+            .section-group
+              b Tests & Quizzes
+              if !course.dates || !course.dates.tests || course.dates.tests.length === 0
+                p.empty-msg No Tests scheduled.
+              else 
+                table
+                  thead
+                    tr 
+                      th Name
+                      th Date 
+                      th Value
+                  tbody
+                    each test in course.dates.tests
+                      tr
+                        td= test.test_name
+                        td= test.date 
+                        td= test.grade_val
+
+            // Tutorials Section
+            .section-group
+              b Tutorials
+              if !course.dates || !course.dates.tutorials || course.dates.tutorials.length == 0
+                p.empty-msg No Tutorials provided in outline.
+              else 
+                ul
+                  each tutorial in course.dates.tutorials 
+                    li= tutorial.tutorial_name + " : " + tutorial.date

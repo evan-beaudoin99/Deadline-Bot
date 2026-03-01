@@ -32,9 +32,13 @@ def format_item(item: dict, item_type: str):
     return ""
 
 def generate_week_content(school: dict, course_info: dict, week: int):
+    schedule = school.get("schedule", [])
+    if week < 1 or week > len(schedule):
+        return "Subject: Weekly Update\n\nNo schedule data available for the selected week."
+
     # Calculate Date Range
-    start_day = datetime.strptime(school["schedule"][week-1]["start"], "%Y-%m-%d")
-    end_day = datetime.strptime(school["schedule"][week-1]["end"], "%Y-%m-%d")
+    start_day = datetime.strptime(schedule[week-1]["start"], "%Y-%m-%d")
+    end_day = datetime.strptime(schedule[week-1]["end"], "%Y-%m-%d")
 
     # Start Building the Email String
     lines = [

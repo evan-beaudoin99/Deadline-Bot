@@ -15,8 +15,20 @@ const userSchema = new mongoose.Schema({
       unique: true,
       lowercase: true
     },
+    institution: {
+      type: String,
+      required: true,
+      ref: 'School'
+    },
+    subscribed: {
+      type: Boolean,
+      default: false
+    },
+    program: {
+      type: String,
+      required: false
+    },
     password: { type: String, required: true },
-
     pdfs: [ 
       {
         type: mongoose.Schema.Types.ObjectId,

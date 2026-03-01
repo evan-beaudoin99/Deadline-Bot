@@ -10,5 +10,3 @@ def get_key():
         raise RuntimeError("API_KEY not set")
     
     return API_KEY
-
-print(get_key())

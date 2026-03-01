@@ -7,8 +7,9 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "nodemon app.js"
+    "test": "node --test tests/*.test.js",
+    "devStart": "nodemon app.js",
+    "start": "node app.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

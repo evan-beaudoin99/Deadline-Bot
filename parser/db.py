@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from bson import ObjectId
+import datetime
 
 client = MongoClient("mongodb://localhost:27017")
 db = client["deadline"]
@@ -8,17 +9,6 @@ pdfs = db["pdfs"]
 courses = db["courses"]
 schools = db["schools"]
 
-
-# Many
-# def get_pdfs(user):
-#     doc = users.find_one({"username": user}, {"pdfs": 1})
-
-#     if not doc: 
-#         print("PDF not found")
-#         exit()
-#     return doc["pdfs"]
-
-# Single
 def get_pdf(pdf_id: str):
 
     doc = pdfs.find_one(
@@ -28,29 +18,60 @@ def get_pdf(pdf_id: str):
     )
 
     if not doc: 
-        print("PDF not found")
-        exit()
+        raise ValueError("PDF not found")
     return doc
 
-
 def save_course_data(userId, course_data):
-
-    course_data['uploadedBy'] = userId
-
     try:
+        course_data['uploadedBy'] = ObjectId(userId)
+
+        existing = courses.find_one(
+            {
+                "course_code": course_data.get("course_code"),
+                "section": course_data.get("section", "A"),
+                "uploadedBy": ObjectId(userId)
+            }
+        )
+
+        if existing:
+            return existing["_id"]
+
         result = courses.insert_one(course_data)
         users.update_one({"_id": ObjectId(userId)}, {"$push": {"courses": result.inserted_id}})
+        return result.inserted_id
       
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    else:
-        print("All operations completed successfully.")
+        return None
 
-def get_course_data(userId):
 
-    # data = courses.find_one({"uploadedBy": userId})
+def update_course_summary(course_id, user_id, course_data):
+    try:
+        result = courses.update_one(
+            {
+                "_id": ObjectId(course_id),
+                "uploadedBy": ObjectId(user_id)
+            },
+            {
+                "$set": {
+                    "course_name": course_data.get("course_name"),
+                    "professor": course_data.get("professor"),
+                    "professor_email": course_data.get("professor_email"),
+                    "dates": course_data.get("dates", {}),
+                    "summaryStatus": "completed",
+                    "summaryCompletedAt": datetime.datetime.utcnow(),
+                    "summaryError": None
+                }
+            }
+        )
 
-    data = courses.find_one({"_id": ObjectId(userId)})
+        return result.modified_count > 0
+    except Exception as e:
+        return False
+
+
+def get_course_data(course_id):
+
+    data = courses.find_one({"_id": ObjectId(course_id)})
 
 
     if not data:
@@ -98,3 +119,20 @@ def get_user_info(userId):
             "data": user,
             "error": None
         }
+
+
+def get_user_courses(userId):
+    user = users.find_one({"_id": ObjectId(userId)}, {"courses": 1})
+
+    if not user:
+        return {
+            "status": "error",
+            "data": None,
+            "error": "user not found"
+        }
+
+    return {
+        "status": "success",
+        "data": user.get("courses", []),
+        "error": None
+    }

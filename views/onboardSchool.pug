@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Request School Onboarding | Deadline Bot 3000
+    link(rel="stylesheet", href="/styles/auth.css")
+
+  body
+    if alertMessage
+      script.
+        alert("#{alertMessage}")
+
+    header
+      h1 Deadline Bot 3000
+
+    nav
+      ul.navbar
+        li: a(href="/register") ← Back to Register
+
+    .auth-wrapper
+      .auth-card
+        h1 Request School Support
+
+        form(method="post", action="/schools/onboard")
+          .form-group
+            label Institution Name
+            input(type="text", name="institution", required, placeholder="e.g., University of Ottawa")
+          .form-group
+            label Contact Email (optional)
+            input(type="email", name="contactEmail", placeholder="you@example.com")
+          .form-group
+            label Notes (optional)
+            input(type="text", name="notes", placeholder="Semester structure or schedule link")
+
+          button.btn-primary(type="submit") Submit Request

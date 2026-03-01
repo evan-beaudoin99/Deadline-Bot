@@ -3,18 +3,18 @@ from email.mime.multipart import MIMEMultipart
 import ssl
 import smtplib
 from emailer_formatter import generate_week_content
+from school_schedule_strategy import resolve_school_schedule
+from pathlib import Path
 
 import os
 import sys
+import json
 
-helpers_path = os.path.join(os.path.dirname(__file__), '../parser')
-sys.path.append(os.path.abspath(helpers_path))
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-import db
-
-USER_ID = "6977adebf3132137c2ceedbe"
-USER = db.get_user_info(USER_ID)["data"]
-SEND_TO = USER["email"]
+import parser.db as db
 
 def send_email(recipient_email, body):
     # Retrieve credentials from Windows Environment Variables
@@ -46,11 +46,72 @@ def send_email(recipient_email, body):
     except Exception as e:
         print(f"Failed to send email: {e}")
 
-course_data = db.get_course_data("697a87cfa814a43fd2c1fbc1")["data"]
-carleton_data = db.get_school("Carleton University")["data"]
+def parse_input_payload():
+    if len(sys.argv) < 2:
+        return None
 
-week = 5 # test week
+    try:
+        return json.loads(sys.argv[1])
+    except json.JSONDecodeError:
+        print("Error: Invalid JSON payload")
+        return None
 
-email_body = generate_week_content(carleton_data, course_data, week)
 
-send_email(SEND_TO, email_body)
+def main():
+    payload = parse_input_payload() or {}
+
+    user_id = payload.get("user_id")
+    course_id = payload.get("course_id")
+    week = int(payload.get("week", 1))
+    semester = payload.get("semester", "winter")
+
+    if not user_id:
+        print("Error: user_id is required")
+        return
+
+    user_result = db.get_user_info(user_id)
+    if user_result.get("status") != "success":
+        print("Error: user not found")
+        return
+
+    user_data = user_result["data"]
+    institution = user_data.get("institution", "")
+
+    schedule_result = resolve_school_schedule(db, institution, semester)
+    if schedule_result.get("status") != "success":
+        print(schedule_result.get("error"))
+        return
+
+    schedule_payload = schedule_result["data"]
+
+    if not course_id:
+        user_courses_result = db.get_user_courses(user_id)
+        if user_courses_result.get("status") != "success" or not user_courses_result.get("data"):
+            print("Error: no courses found for user")
+            return
+        course_id = str(user_courses_result["data"][0])
+
+    course_result = db.get_course_data(course_id)
+    if course_result.get("status") != "success":
+        print("Error: course not found")
+        return
+
+    course_data = course_result["data"]
+    email_body = generate_week_content(schedule_payload, course_data, week)
+
+    if schedule_payload.get("strategy") == "fallback":
+        email_body += (
+            f"\n\nNote: Using {schedule_payload.get('institution')} schedule "
+            f"for {schedule_payload.get('requested_institution')} account."
+        )
+
+    send_to = user_data.get("email")
+    if not send_to:
+        print("Error: user has no email address")
+        return
+
+    send_email(send_to, email_body)
+
+
+if __name__ == "__main__":
+    main()

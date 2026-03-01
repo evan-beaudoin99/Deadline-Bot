@@ -18,9 +18,9 @@ html(lang="en")
 
     ul.navbar
       li: a(href="/") Dashboard
-      li: a(href="/data") Course Summary
       if session.loggedIn
         li: a(href="/logout") Logout
+        li: a(href="/addcourse") Add Course
       else
         li: a(href="/login") Login
         li: a(href="/register") Register
@@ -33,34 +33,55 @@ html(lang="en")
       if session.loggedIn
         section.course-card
           h3 Welcome back, #{session.user.firstname}!
-          
-          .file-upload-box
-            label(for="pdf") 
-              strong 📂 Upload PDF Course Outline
-            form(action="/upload", method="post", enctype="multipart/form-data")
-              input(type="file", name="pdf")
-              br
-              button.btn-primary(type="submit" ) Upload
+          .dashboard-actions
+            a.btn-primary-link(href="/addcourse") + Add Course
 
-          h3 Your Documents
-          if session.user.pdfs && session.user.pdfs.length > 0
-            ul.pdf-list
-              each pdf in session.user.pdfs
-                li.pdf-element
-                  - pdf_name = pdf.filename.split('.')[0]
-                  span 📄 #{pdf_name}
-                  .pdf-actions
-                    button#parse.btn-secondary(type="submit", onclick=`startProcess(event, '${pdf._id}')`) Parse
-                    div#status-icon
-                    a(href='#' onclick=`handleRemove(event, '${session.user.id}', '${pdf._id}')`)
-                      img(src="/images/remove.png", alt="remove")
-            form(action="/start-emailer", method="post")
-              button.btn-primary(type="submit") Get Weekly Updates
+
+          h3 Your Courses
+          if courses && courses.length > 0
+            ul.course-status-list#course-status-list
+              each course in courses
+                li.course-status-item(data-course-id=`${course._id}`)
+                  .course-meta
+                    strong #{course.course_code}
+                    span.course-name  - #{course.course_name || 'Course'}
+                  .course-row-actions
+                    .course-status-action
+                      if !course.summaryStatus || course.summaryStatus === 'completed'
+                        a.btn-secondary(href=`/data?courseId=${course._id}`) Show Summary
+                      else if course.summaryStatus === 'failed'
+                        form(action='/courses/retry-summary', method='post')
+                          input(type='hidden', name='courseId', value=`${course._id}`)
+                          button.btn-secondary(type='submit') Retry Summary
+                      else
+                        .status-loading
+                          span.loader
+                          span Processing summary...
+                    form(action='/courses/remove', method='post')
+                      input(type='hidden', name='courseId', value=`${course._id}`)
+                      input(type='hidden', name='redirectTo', value='/')
+                      button.btn-danger(type='submit') Remove
           else
-            p No PDFs uploaded yet.
+            p No courses yet. Click Add Course to get started.
+
+          
+          
+          
+          
+      
+        form(action="/subscribe", method="post")
+          button.btn-primary(type="submit") Get Weekly Updates
 
 
       else 
         section.course-card
           h2 Get Started
           p Please #[a(href="/login") Log In] or #[a(href="/register") Create an Account] to start tracking your deadlines.
+
+    if session.loggedIn
+      script.
+        window.addEventListener('DOMContentLoaded', function () {
+          if (typeof startCourseStatusPolling === 'function') {
+            startCourseStatusPolling();
+          }
+        });

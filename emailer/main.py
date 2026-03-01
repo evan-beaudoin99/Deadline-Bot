@@ -1,63 +1,61 @@
+import json
+import sys
+from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from openai import OpenAI
-from data_extracter_single_pdf import summarize
+from parser.data_extracter_single_pdf import summarize
 import parser.api_auth as api_auth
 import parser.db as db
-import sys
-import json
 
 
 def getEmailInfo() -> dict:
+    if len(sys.argv) < 2:
+        raise ValueError("Missing summarize payload argument")
+
     try: 
-        # if len(sys.argv) < 1:
-        #     print("PDF Not found")
-        #     exit()
-        # else:
         emailInfo = json.loads(sys.argv[1])
 
         return emailInfo
 
     except json.JSONDecodeError:
-        print("Error: Invalid Json string received")
+        raise ValueError("Invalid JSON payload received")
 
 # start = time.perf_counter()
 
 API_KEY = api_auth.get_key()
-
 client = OpenAI(api_key=f"{API_KEY}")
-
-student_section = "A"
-
-# user = "evanbeaudoin"
-# pdfs = db.get_pdfs(user)
-
-# print("Main", pdf_id)
-
-# pdf = db.get_pdf(pdf_id)
 
 
 
 def main():
+    try:
+        emailInfo = getEmailInfo()
 
-    emailInfo = getEmailInfo()
+        user_id = emailInfo.get('user_id')
+        pdf_id = emailInfo.get('pdf_id')
+        course_id = emailInfo.get('course_id')
+        course_metadata = emailInfo.get('course_metadata', {})
 
-    user_id = emailInfo.get('user_id')
-    pdf_id = emailInfo.get('pdf_id')
+        if not user_id or not pdf_id or not course_id:
+            raise ValueError("user_id, pdf_id, and course_id are required")
 
-    pdf = db.get_pdf(pdf_id)
+        pdf = db.get_pdf(pdf_id)
+        extracted_summary = summarize(pdf, course_metadata, client)
 
-    data = summarize(pdf, student_section, client)
+        payload = {
+            "success": True,
+            "course_id": course_id,
+            "summary": extracted_summary
+        }
 
-    if (data == -1):
-        print("No PDFS")
-        return
-    
-    db.save_course_data(user_id, data)
-
-    # print("✅ Extraction complete! Results stored in database")
-    # end = time.perf_counter()
-    # print(f"Runtime: {end - start:.6f} seconds")
+        print(json.dumps(payload))
+    except Exception as error:
+        print(f"Summary extraction failed: {error}", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__" :
     main()

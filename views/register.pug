@@ -5,13 +5,13 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Deadline Bot 3000
     link(rel="stylesheet", href="/styles/auth.css")
+    script(src="/scripts/client.js")
 
   body
 
     if alertMessage 
       script.
         alert("#{alertMessage}")
-        -alertMessage = ""
 
     header
       h1 Deadline Bot 3000
@@ -32,6 +32,16 @@ html(lang="en")
             label Last Name:
             input(type="text", name="lastname", placeholder="Last Name")
           .form-group
+            //- populate dynamically later
+            label Select Institution:
+            select(type="select", name="institution") 
+              option(value="Carleton University") Carleton University
+            p
+              small Need another school? #[a(href="/schools/onboard") Request onboarding]
+          .form-group
+            label Program:
+            input(type="text", name="program", placeholder="Enter program")
+          .form-group
             label Create Username:
             input(type="text", name="username", placeholder="Enter username")
           .form-group
@@ -39,7 +49,10 @@ html(lang="en")
             input(type="text", name="email", placeholder="Enter email")
           .form-group
             label Create a Password:
-            input(type="password", name="password", placeholder="Enter passwword")
+            input(type="password", name="password", placeholder="Enter password")
+          .subscribe
+            label Subscribe:
+            <input type="checkbox" id="subscribedCheckbox" name="isChecked">
 
           button.btn-primary(type="submit") Submit
 

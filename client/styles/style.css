@@ -94,6 +94,94 @@ header {
   transform: translateY(-1px);
 }
 
+.btn-primary-link {
+  display: inline-block;
+  background-color: var(--carleton-red);
+  color: white;
+  text-decoration: none;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.btn-primary-link:hover {
+  background-color: #a00f28;
+  transform: translateY(-1px);
+}
+
+.dashboard-actions {
+  margin-bottom: 18px;
+}
+
+.course-status-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.course-status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.course-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.course-name {
+  color: #555;
+}
+
+.status-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.status-failed {
+  color: #a00f28;
+  font-weight: 600;
+}
+
+.course-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-danger {
+  background-color: #a00f28;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-danger:hover {
+  background-color: #7f0c1f;
+}
+
 .btn-secondary {
   background-color: var(--dark-grey);
   color: white;

@@ -1,0 +1,60 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Add Course | Deadline Bot 3000
+    link(rel="stylesheet", href="/styles/course.css")
+    script(src="/scripts/client.js")
+
+  body
+    if alertMessage
+      script.
+        alert("#{alertMessage}")
+
+
+    .container
+      .add-course-layout
+        .add-course-main
+          h1 Add Course
+
+          form(method="post", action="/addcourse", enctype="multipart/form-data")
+            p.step-title Step 1: Upload one course document
+            .file-upload-box
+              p Upload your syllabus or course outline PDF.
+              input(type="file", name="pdf", required)
+
+            p.step-title Step 2: Enter course details
+            .form-group
+              label(for="ccode") Course Code
+              input(type="text", id="ccode", name="course_code", required)
+
+            .form-group
+              label(for="cname") Course Name
+              input(type="text", id="cname", name="course_name", required)
+
+            .form-group
+              label(for="section") Section
+              select(id="section", name="section")
+                option(value="A") A
+                option(value="B") B
+                option(value="C") C
+
+            p.step-title Step 3: Finalize & Start Summary
+            button.btn-primary.final-submit(type="submit") Add Course
+
+        aside.add-course-help
+          h2 Example Steps
+          ol
+            li Upload one syllabus or outline PDF.
+            li Enter your course code, name, and section.
+            li Click Add Course to start background summary generation.
+          p.help-note Tip: You only submit once, and summary processing continues in the background.
+
+
+
+//- button#parse.btn-secondary(type="submit", onclick=`startProcess(event, '${pdf._id}')`) Parse
+//- div#status-icon
+//- a(href='#' onclick=`handleRemove(event, '${session.user.id}', '${pdf._id}')`)
+//-     img(src="/images/remove.png", alt="remove")
+

@@ -28,7 +28,7 @@ def prompt_text(student_section, course_code, text):
 
         {{
         "course_code": "{course_code}",
-        "course_name": ""
+        "course_name": "",
         "professor": "",
         "professor_email": "",
         "dates": {{
