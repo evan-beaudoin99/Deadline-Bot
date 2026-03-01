@@ -8,7 +8,7 @@ Deadline Bot sends weekly updates and foresight on all your deadlines (tests, qu
 
 All you need to do is create an account, then upload your course outlines once. Simple.
 
-### Not 100% done yet, server will be available to use when completed
+### *Not 100% done yet, server will be available to use when completed*
 
 
 ## What the project does
